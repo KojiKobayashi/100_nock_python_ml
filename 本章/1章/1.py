@@ -51,3 +51,16 @@ order_all
 len(tbl_order4) + len(tbl_order5) == len(order_all)
 
 # %%
+'''
+3rd nock
+'''
+
+# %%
+import os
+current_dir = os.getcwd()
+current_dir
+
+# %%
+os.listdir(current_dir)
+
+# %%
