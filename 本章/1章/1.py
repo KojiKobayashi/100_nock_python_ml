@@ -98,3 +98,18 @@ order_all
 order_all.isnull().sum()
 
 # %%
+order_all.describe()
+
+# %%
+order_all['total_amount'].describe()
+
+# %%
+print(order_all['order_accept_date'].min())
+print(order_all['order_accept_date'].max())
+print(order_all['delivered_date'].min())
+print(order_all['delivered_date'].max())
+
+# %%
+
+
+# %%
