@@ -64,3 +64,37 @@ current_dir
 os.listdir(current_dir)
 
 # %%
+tbl_order_file = os.path.join(current_dir, 'tbl_order_*.csv')
+tbl_order_file
+
+# %%
+import glob
+tbl_order_files = glob.glob(tbl_order_file)
+tbl_order_files
+
+# %%
+'''
+4th nock
+'''
+
+#%%
+order_all = pd.DataFrame()
+file = tbl_order_files[0]
+order_data = pd.read_csv(file)
+print(f'{file}:{len(order_data)}')
+order_all = pd.concat([order_all, order_data], ignore_index=True)
+order_all
+
+# %%
+order_all = pd.DataFrame()
+for file in tbl_order_files:
+  order_data = pd.read_csv(file)
+  print(f'{file}:{len(order_data)}')
+  order_all = pd.concat([order_all, order_data], ignore_index=True)
+order_all
+
+# %%
+# 欠損値のカウント
+order_all.isnull().sum()
+
+# %%
