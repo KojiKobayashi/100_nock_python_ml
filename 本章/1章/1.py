@@ -110,6 +110,52 @@ print(order_all['delivered_date'].min())
 print(order_all['delivered_date'].max())
 
 # %%
+'''
+6th nock
+'''
 
+# %%
+order_all
+
+# %%
+order_data = order_all.loc[order_all['store_id'] != 999]
+order_data
+
+# %%
+'''
+7th nock
+'''
+
+# %%
+order_data = pd.merge(order_data, m_stores, on='store_id', how='left')
+order_data
+
+# %%
+order_data = pd.merge(order_data, m_area, on='area_cd', how='left')
+# %%
+order_data
+
+# %%
+'''
+8th nock
+'''
+
+# %%
+order_data.loc[order_data['takeout_flag'] == 0, 'takeout_name'] = 'デリバリー'
+# %%
+order_data.loc[order_data['takeout_flag'] == 1, 'takeout_name'] = 'お持ち帰り'
+
+# %%
+order_data
+# %%
+order_data.loc[order_data['status'] == 0, 'status_name'] = '受付'
+# %%
+order_data.loc[order_data['status'] == 1, 'status_name'] = 'お支払済み'
+# %%
+order_data.loc[order_data['status'] == 2, 'status_name'] = 'お渡し済'
+# %%
+order_data.loc[order_data['status'] == 9, 'status_name'] = 'キャンセル'
+# %%
+order_data
 
 # %%
