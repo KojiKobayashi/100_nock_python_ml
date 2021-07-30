@@ -159,3 +159,20 @@ order_data.loc[order_data['status'] == 9, 'status_name'] = 'キャンセル'
 order_data
 
 # %%
+'''
+9th nock
+'''
+
+# %%
+output_dir = os.path.join(current_dir, 'outout_data')
+os.makedirs(output_dir, exist_ok=True)
+
+# %%
+output_file = os.path.join(output_dir, 'order_data.csv')
+order_data.to_csv(output_file, index=False)
+
+# %%
+'''
+10th nock
+略
+'''
