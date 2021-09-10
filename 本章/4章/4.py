@@ -3,6 +3,7 @@
 31th nock
 '''
 
+#%%
 import pandas as pd
 import glob
 import os
@@ -37,8 +38,8 @@ order_all = pd.merge(order_all, m_area, on='area_cd', how='left')
 
 # %%
 # マスターにないコードに対応した文字列を設定
-order_all.loc[order_all['takeout_flag']==0, 'take_out_name'] = 'デリバリー'
-order_all.loc[order_all['takeout_flag']==1, 'take_out_name'] = 'お持ち帰り'
+order_all.loc[order_all['takeout_flag'] == 0, 'take_out_name'] = 'デリバリー'
+order_all.loc[order_all['takeout_flag'] == 1, 'take_out_name'] = 'お持ち帰り'
 
 # %%
 order_all.loc[order_all['status'] == 0, 'status_name'] = '受付'
