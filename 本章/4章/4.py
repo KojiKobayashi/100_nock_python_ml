@@ -4,6 +4,7 @@
 '''
 
 #%%
+from openpyxl import styles
 import pandas as pd
 import glob
 import os
@@ -59,14 +60,14 @@ import openpyxl
 # %%
 wb = openpyxl.Workbook()
 ws = wb['Sheet']
-ws.cell(1,1).value = '書き込みテストです。'
+ws.cell(1, 1).value = '書き込みテストです。'
 wb.save('test.xlsx')
 wb.close()
 
 # %%
 wb = openpyxl.load_workbook('test.xlsx', read_only=True)
 ws = wb['Sheet']
-print(ws.cell(1,1).value)
+print(ws.cell(1, 1).value)
 wb.close()
 
 # %%
@@ -103,6 +104,63 @@ for row_no, row in enumerate(rows, row_start):
 
 filename = f'{store_title}.xlsx'
 wb.save(filename)  # 本と中身がちがう？
+wb.close()
+
+# %%
+'''
+32th nock
+'''
+
+# %%
+from openpyxl.styles import PatternFill, Border, Side, Font
+
+wb = openpyxl.load_workbook(filename)
+ws = wb[store_title]
+
+side = Side(style='thin', color='008080')
+border = Border(top=side, bottom=side, left=side, right=side)
+
+# らせん
+for row in ws:
+    for cell in row:
+        if ws[cell.coordinate].value:
+            ws[cell.coordinate].border = border
+# %%
+ws.cell(1, 1).font = Font(bold=True, color='008080')
+
+cell = ws.cell(3, 2)
+cell.fill = PatternFill(patternType='solid', fgColor='008080')
+cell.value = '注文受注日時'
+cell.font = Font(bold=True, color='FFFFFF')
+
+cell = ws.cell(3, 3)
+cell.fill = PatternFill(patternType='solid', fgColor='008080')
+cell.value = '顧客ID'
+cell.font = Font(bold=True, color='FFFFFF')
+
+cell = ws.cell(3, 4)
+cell.fill = PatternFill(patternType='solid', fgColor='008080')
+cell.value = '購入総額'
+cell.font = Font(bold=True, color='FFFFFF')
+
+cell = ws.cell(3, 5)
+cell.fill = PatternFill(patternType='solid', fgColor='008080')
+cell.value = '注文タイプ'
+cell.font = Font(bold=True, color='FFFFFF')
+
+cell = ws.cell(3, 6)
+cell.fill = PatternFill(patternType='solid', fgColor='008080')
+cell.value = '注文状態'
+cell.font = Font(bold=True, color='FFFFFF')
+
+ws.column_dimensions['A'].width = 20
+ws.column_dimensions['B'].width = 20
+ws.column_dimensions['C'].width = 12
+ws.column_dimensions['D'].width = 12
+ws.column_dimensions['E'].width = 12
+ws.column_dimensions['F'].width = 12
+
+wb.save(filename)
 wb.close()
 
 # %%
