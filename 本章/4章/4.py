@@ -3,7 +3,7 @@
 31th nock
 '''
 
-#%%
+# %%
 from openpyxl import styles
 import pandas as pd
 import glob
@@ -49,7 +49,8 @@ order_all.loc[order_all['status'] == 2, 'status_name'] = 'お渡し済'
 order_all.loc[order_all['status'] == 3, 'status_name'] = 'キャンセル'
 
 # %%
-order_all.loc[:, 'order_date'] = pd.to_datetime(order_all['order_accept_date']).dt.date
+order_all.loc[:, 'order_date'] = pd.to_datetime(
+    order_all['order_accept_date']).dt.date
 
 # %%
 order_all.head()
@@ -72,11 +73,11 @@ wb.close()
 
 # %%
 store_id = 1
-store_df = order_all[order_all['store_id']==store_id].copy()
+store_df = order_all[order_all['store_id'] == store_id].copy()
 store_name = store_df['store_name'].unique()[0]
-store_sales_total = store_df.loc[store_df['status'].isin([1,2])]['total_amount'].sum()
+store_sales_total = store_df.loc[store_df['status'].isin([1, 2])]['total_amount'].sum()
 store_sales_takeout = store_df.loc[store_df['status'] == 1]['total_amount'].sum()
-store_sales_delivery = store_df.loc[store_df['status']==2]['total_amount'].sum()
+store_sales_delivery = store_df.loc[store_df['status'] == 2]['total_amount'].sum()
 
 # %%
 print(f'売上額確認 {store_sales_total} = {store_sales_takeout + store_sales_delivery}')
@@ -163,4 +164,50 @@ ws.column_dimensions['F'].width = 12
 wb.save(filename)
 wb.close()
 
+# %%
+'''
+33th nock
+'''
+
+# %%
+def calc_delta(t):
+    t1, t2 = t
+    delta = t2 - t1
+    return delta.total_seconds()/60
+
+store_df.loc[:, 'order_accept_datetime'] = pd.to_datetime(store_df['order_accept_date'])
+store_df.loc[:, 'delivered_datetime'] = pd.to_datetime(store_df['delivered_date'])
+store_df.loc[:, 'delta'] = store_df[['order_accept_datetime', 'delivered_datetime']].apply(calc_delta, axis=1)
+delivery_time = store_df.groupby(['store_id'])['delta'].describe()
+delivery_time
+
+# %%
+openpyxl.load_workbook(filename)
+ws = wb[store_title]
+
+cell = ws.cell(1, 7)
+cell.value = f'配達完了までの時間'
+cell.font = Font(bold=True, color='008080')
+
+rows = dataframe_to_rows(delivery_time, index=False, header=True)
+
+# 表の貼り付け位置
+row_start = 3
+col_start = 8
+
+for row_no, row in enumerate(rows, row_start):
+    for col_no, value in enumerate(row, col_start):
+        cell = ws.cell(row_no, col_no)
+        cell.value = value
+        cell.border = border
+        if row_no == row_start:
+            cell.fill = PatternFill(patternType='solid', fgColor='008080')
+            cell.font = Font(bold=True, color='FFFFFF')
+
+filename = f'{store_title}.xlsx'
+wb.save(filename)
+wb.close()
+
+# %%
+filename
 # %%
