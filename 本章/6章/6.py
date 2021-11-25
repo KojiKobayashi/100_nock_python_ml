@@ -191,13 +191,30 @@ store_all.to_csv(os.path.join(ouput_dir, store_monthly_name), index=False)
 # %%
 ''' 58th knock '''
 # 一か月前との差をとって目的変数とする
-y = store_all['store_name', 'year_month', 'order_weekday', 'order_weekend'].copy()
-y.loc[:, 'one_month_ago'] = pd.to_datetime(y['yeat_month'], format='%y%m')
+y = store_all[['store_name', 'year_month', 'order_weekday', 'order_weekend']].copy()
+y.loc[:, 'one_month_ago'] = pd.to_datetime(y['year_month'], format='%Y%m')
 from dateutil.relativedelta import relativedelta
-y.loc[:, 'one_month_age'] = y['one_month_age'].map(lambda x: x - relativedelta(months=1))
-y.loc[:, 'one_month_age'] = y['one_month_age'].dt.strftime('%Y%m')
+y.loc[:, 'one_month_ago'] = y['one_month_ago'].map(lambda x: x - relativedelta(months=1))
+y.loc[:, 'one_month_ago'] = y['one_month_ago'].dt.strftime('%Y%m')
 y.head(3)
 
 # %%
-store_all.columns
+y_one_month = y.copy()
+y_one_month.rename(columns={'order_weekday':'order_weekday_one_month_ago'}, inplace=True)
+y_one_month.rename(columns={'order_weekend':'order_weekdend_one_month_ago'}, inplace=True)
+# 元票の一か月前とこのjoin用カラムを結合キーとして一か月ずらす
+y_one_month.rename(columns={'year_month':'year_month_for_join'}, inplace=True)
+# left_on, right_on でキーの違う列を結合できる
+y = pd.merge(y,y_one_month[['store_name', 'year_month_for_join', 'order_weekday_one_month_ago', 'order_weekdend_one_month_ago']]
+    , left_on=['store_name', 'one_month_ago'], right_on=['store_name', 'year_month_for_join'], how='left')
+y.loc[y['store_name'] == 'あきる野店']
+
+# %%
+y.dropna(inplace=True)
+y.loc[y['order_weekday'] - y['order_weekday_one_month_ago']>0, 'y_weekday'] = 1
+y.loc[y['order_weekday'] - y['order_weekday_one_month_ago']<=0, 'y_weekday'] = 0
+y.loc[y['order_weekend'] - y['order_weekdend_one_month_ago']>0, 'y_weekend'] = 1
+y.loc[y['order_weekend'] - y['order_weekdend_one_month_ago']<=0, 'y_weekend'] = 0
+y.head(3)
+
 # %%
