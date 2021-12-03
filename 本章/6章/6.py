@@ -211,10 +211,10 @@ y.loc[y['store_name'] == 'あきる野店']
 
 # %%
 y.dropna(inplace=True)
-y.loc[y['order_weekday'] - y['order_weekday_one_month_ago']>0, 'y_weekday'] = 1
-y.loc[y['order_weekday'] - y['order_weekday_one_month_ago']<=0, 'y_weekday'] = 0
-y.loc[y['order_weekend'] - y['order_weekdend_one_month_ago']>0, 'y_weekend'] = 1
-y.loc[y['order_weekend'] - y['order_weekdend_one_month_ago']<=0, 'y_weekend'] = 0
+y.loc[y['order_weekday'] - y['order_weekday_one_month_ago'] > 0, 'y_weekday'] = 1
+y.loc[y['order_weekday'] - y['order_weekday_one_month_ago'] <= 0, 'y_weekday'] = 0
+y.loc[y['order_weekend'] - y['order_weekdend_one_month_ago'] > 0, 'y_weekend'] = 1
+y.loc[y['order_weekend'] - y['order_weekdend_one_month_ago'] <= 0, 'y_weekend'] = 0
 y.head(3)
 
 # %%
