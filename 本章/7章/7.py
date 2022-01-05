@@ -101,14 +101,14 @@ print(tn_train, fp_train, fn_train, tp_train)
 print(tn_test, fp_test, fn_test, tp_test )
 
 # %%
-score_train = pd.DataFrame({'DataCategory':['train'],
-    'acc':acc_train, 'f1':f1_train,
-    'recall':recall_train, 'precision':precision_train,
-    'tp':tp_train,'fn':fn_train,'fp':fp_train,'tn':tn_train})
-score_test = pd.DataFrame({'DataCategory':['test'],
-    'acc':acc_test, 'f1':f1_test,
-    'recall':recall_test, 'precision':precision_test,
-    'tp':tp_test,'fn':fn_test,'fp':fp_test,'tn':tn_test})
+score_train = pd.DataFrame({'DataCategory': ['train'],
+    'acc': acc_train, 'f1': f1_train,
+    'recall': recall_train, 'precision': precision_train,
+    'tp': tp_train, 'fn': fn_train, 'fp': fp_train, 'tn': tn_train})
+score_test = pd.DataFrame({'DataCategory': ['test'],
+    'acc': acc_test, 'f1': f1_test,
+    'recall': recall_test, 'precision': precision_test,
+    'tp': tp_test, 'fn': fn_test, 'fp': fp_test, 'tn': tn_test})
 score = pd.concat([score_train, score_test], ignore_index=True)
 score
 
@@ -136,24 +136,27 @@ def make_model_and_eval(model, X_train, X_test, y_train, y_test):
     tn_train, fp_train, fn_train, tp_train = confusion_matrix(y_train, y_pred_train).ravel()
     tn_test, fp_test, fn_test, tp_test = confusion_matrix(y_test, y_pred_test).ravel()
 
-    score_train = pd.DataFrame({'DataCategory':['train'],
-        'acc':acc_train, 'f1':f1_train,
-        'recall':recall_train, 'precision':precision_train,
-        'tp':tp_train,'fn':fn_train,'fp':fp_train,'tn':tn_train})
-    score_test = pd.DataFrame({'DataCategory':['test'],
-        'acc':acc_test, 'f1':f1_test,
-        'recall':recall_test, 'precision':precision_test,
-        'tp':tp_test,'fn':fn_test,'fp':fp_test,'tn':tn_test})
+    score_train = pd.DataFrame({
+        'DataCategory': ['train'],
+        'acc': acc_train, 'f1': f1_train,
+        'recall': recall_train, 'precision': precision_train,
+        'tp': tp_train, 'fn': fn_train, 'fp': fp_train, 'tn': tn_train})
+    score_test = pd.DataFrame({
+        'DataCategory': ['test'],
+        'acc': acc_test, 'f1': f1_test,
+        'recall': recall_test, 'precision': precision_test,
+        'tp': tp_test, 'fn': fn_test, 'fp': fp_test, 'tn': tn_test})
     score = pd.concat([score_train, score_test], ignore_index=True)
 
-    importance = pd.DataFrame({'cols':X_train.columns, 'importance':model.feature_importances_})
+    importance = pd.DataFrame({
+        'cols': X_train.columns,
+        'importance': model.feature_importances_})
     importance = importance.sort_values('importance', ascending=False)
 
-    cols = pd.DataFrame({'X_cols':X_train.columns})
+    cols = pd.DataFrame({'X_cols': X_train.columns})
 
     display(score)
     return score, importance, model, cols
-    
 
 # %%
 model = DecisionTreeClassifier(random_state=0)
@@ -181,8 +184,10 @@ model_path = os.path.join(target_output_dir, model_name)
 score.to_csv(score_path, index=False)
 importance.to_csv(importance_path, index=False)
 cols.to_csv(cols_path, index=False)
+
 import pickle
 
 with open(model_path, mode='wb') as f:
     pickle.dump(model, f, protocol=2)
 # %%
+''' 69th nock '''
